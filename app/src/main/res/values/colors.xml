@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primaryOrange">#FF9843</color>
+    <color name="greenAccent">#0ABC2D</color>
+    <!--
+    <color name="orangeAccent">#F05434</color>
+    <color name="orangeAccent">#F05434</color>
+    -->
+    <color name="blueButton">#4B7ED4</color>
 </resources>
