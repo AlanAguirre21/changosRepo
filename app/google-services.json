@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "799567493649",
+    "project_id": "parkandgo-d06af",
+    "storage_bucket": "parkandgo-d06af.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799567493649:android:d6c00dd63333d58ee90fb0",
+        "android_client_info": {
+          "package_name": "com.example.parkgo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA40SM4MXUcvZ2ir1MJYUp-cIKZhosD30c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
