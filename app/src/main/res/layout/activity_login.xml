@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
 
-    <Button
+
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/googleButton"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:drawableStart="@mipmap/logo_google128"
-        android:text="Sign In with Google"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

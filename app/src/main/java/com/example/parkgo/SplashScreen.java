@@ -22,6 +22,7 @@ public class SplashScreen extends AppCompatActivity {
         });
 
         Thread thread = new Thread() {
+            /** @noinspection CallToPrintStackTrace*/
             @Override
             public void run() {
                 try {
