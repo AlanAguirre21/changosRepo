@@ -1,38 +1,32 @@
 package com.example.parkgo;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
-/** @noinspection ALL */
 public class Login extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 9001;
-    private static final String TAG = "LoginActivity";
-
+    private static final int RC_SIGN_IN = 100;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+    private SignInButton googleButton;
 
-    SignInButton googleButton;
-
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,65 +36,56 @@ public class Login extends AppCompatActivity {
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        // Configurar Google Sign In
-        //noinspection deprecation
+        // Configurar opciones de Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)) // ESTE ID lo saca de google-services.json
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Botón de Google
+        // Referencia al botón de Google
         googleButton = findViewById(R.id.googleButton);
-        googleButton.setOnClickListener(view -> signIn());
+
+        // Clic en el botón
+        googleButton.setOnClickListener(view -> signInWithGoogle());
     }
 
-    private void signIn() {
+    private void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Resultado del intento de inicio de sesión
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Inicio de sesión exitoso
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());
+                // Autenticar con Firebase
+                firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Fallo el inicio de sesión
-                Log.w(TAG, "Google sign in failed", e);
-                Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error en el login: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
-
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Inicio de sesión exitoso
+                        // Login exitoso
                         FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(Login.this, "Bienvenido: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                        irAMenuPrincipal();
+                        Toast.makeText(Login.this, "Bienvenido " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                        // Ir a siguiente pantalla (ejemplo: MainActivity)
+                        startActivity(new Intent(Login.this, Maps.class));
+                        finish();
                     } else {
-                        // Fallo
-                        Log.w(TAG, "signInWithCredential:failure", task.getException());
-                        Toast.makeText(Login.this, "Autenticación Fallida", Toast.LENGTH_SHORT).show();
+                        // Fallo en autenticación
+                        Toast.makeText(Login.this, "Error al autenticar con Firebase", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
-    private void irAMenuPrincipal() {
-        Intent intent = new Intent(Login.this, SplashScreen.class); // Puedes cambiar a tu pantalla principal
-        startActivity(intent);
-        finish();
-    }
 }
-
