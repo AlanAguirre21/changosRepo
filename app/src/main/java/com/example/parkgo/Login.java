@@ -2,6 +2,7 @@ package com.example.parkgo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -49,6 +50,12 @@ public class Login extends AppCompatActivity {
 
         // Clic en el botón
         googleButton.setOnClickListener(view -> signInWithGoogle());
+
+        Button adminButton = findViewById(R.id.button); // tu botón "Pulsa aquí"
+        adminButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Login.this, AdminOptionsActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void signInWithGoogle() {

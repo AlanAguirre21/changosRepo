@@ -1,12 +1,17 @@
 package com.example.parkgo;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,6 +85,29 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+        EditText searchBar = findViewById(R.id.searchBar);
+
+        // Opcional: al hacer clic, enfocar y abrir el teclado
+        searchBar.setOnClickListener(v -> {
+            searchBar.requestFocus();
+            searchBar.postDelayed(() -> {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(searchBar, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }, 100);
+        });
+
+        searchBar.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String query = searchBar.getText().toString();
+                // Aquí podrías hacer algo con el texto, como usar Geocoder
+                Toast.makeText(this, "Buscando: " + query, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
     }
 
 
