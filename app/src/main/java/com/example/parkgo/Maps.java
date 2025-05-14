@@ -3,14 +3,18 @@ package com.example.parkgo;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,7 +36,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private FirebaseAuth mAuth;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
-    private Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +49,29 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        ImageView profileImageView = findViewById(R.id.profileImageView);
 
-        logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> logout());
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (account != null) {
+            Uri photoUrl = account.getPhotoUrl();
+            if (photoUrl != null) { Glide.with(this)
+                        .load(photoUrl)
+                        .placeholder(R.drawable.ic_profile_placeholder)
+                        .error(R.drawable.ic_profile_placeholder)
+                        .circleCrop()
+                        .into(profileImageView);
+            }
+        }
+
+        // Al hacer clic, abre la nueva pantalla con información del usuario
+        profileImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(Maps.this, UserProfileActivity.class);
+            intent.putExtra("userName", account.getDisplayName());
+            intent.putExtra("userEmail", account.getEmail());
+            intent.putExtra("userPhoto", account.getPhotoUrl().toString());
+            startActivity(intent);
+        });
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -59,14 +82,6 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
-    private void logout() {
-        mAuth.signOut();
-        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
-            Intent intent = new Intent(Maps.this, Login.class);
-            startActivity(intent);
-            finish();
-        });
-    }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {

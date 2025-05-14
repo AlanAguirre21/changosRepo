@@ -4,6 +4,7 @@ credentials = "1.5.0"
 credentialsPlayServicesAuth = "1.5.0"
 firebaseAuthVersion = "22.3.0"
 firebaseBom = "33.13.0"
+glide = "4.14.2"
 googleid = "1.1.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -22,6 +23,7 @@ androidx-credentials = { module = "androidx.credentials:credentials", version.re
 credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 google-firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
