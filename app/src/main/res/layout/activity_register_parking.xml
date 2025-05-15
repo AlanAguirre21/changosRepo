@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del estacionamiento" />
+
+        <EditText
+            android:id="@+id/editTextAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dirección" />
+
+        <EditText
+            android:id="@+id/editTextSpaces"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Plazas disponibles" />
+
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:hint="Teléfono" />
+
+        <EditText
+            android:id="@+id/editTextSchedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Horario" />
+
+        <EditText
+            android:id="@+id/editTextCostPerHour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Costo por hora" />
+
+        <EditText
+            android:id="@+id/editTextRestrictions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Restricciones" />
+
+        <Button
+            android:id="@+id/buttonSaveParking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar Estacionamiento" />
+    </LinearLayout>
+</ScrollView>

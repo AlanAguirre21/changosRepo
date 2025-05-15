@@ -1,5 +1,6 @@
 package com.example.parkgo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,7 +68,8 @@ public class AdminLoginActivity extends AppCompatActivity {
                 .addOnSuccessListener(authResult -> {
                     Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
                     // TODO: redirigir a pantalla principal de admin
-                    finish();
+                    Intent intent = new Intent(AdminLoginActivity.this, ManageParkingsActivity.class);
+                    startActivity(intent);
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Credenciales inválidas", Toast.LENGTH_SHORT).show());
     }
