@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +19,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -34,6 +36,10 @@ public class ManageParkingsActivity extends AppCompatActivity {
     private ParkingAdapter adapter;
     private List<Parking> parkingList;
 
+    private Button buttonEditParking, buttonDeleteParking, buttonConfirmDelete;
+    private boolean deleteMode = false;
+    private Set<String> selectedForDeletion = new HashSet<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,17 +47,41 @@ public class ManageParkingsActivity extends AppCompatActivity {
 
         recyclerViewParkings = findViewById(R.id.recyclerViewParkings);
         buttonAddParking = findViewById(R.id.buttonAddParking);
+        buttonEditParking = findViewById(R.id.buttonEditParking);
+        buttonDeleteParking = findViewById(R.id.buttonDeleteParking);
+        buttonConfirmDelete = findViewById(R.id.buttonConfirmDelete);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         parkingList = new ArrayList<>();
-        adapter = new ParkingAdapter(parkingList);
+        adapter = new ParkingAdapter(parkingList, true); // permite checkboxes
+        adapter.setOnSelectionChangedListener(selectedIds -> selectedForDeletion = selectedIds);
 
         recyclerViewParkings.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewParkings.setAdapter(adapter);
 
         loadParkings();
+
+        buttonDeleteParking.setOnClickListener(v -> {
+            deleteMode = true;
+            buttonConfirmDelete.setVisibility(View.VISIBLE);
+            adapter.setDeleteMode(true);
+            adapter.notifyDataSetChanged();
+        });
+
+        buttonConfirmDelete.setOnClickListener(v -> {
+            for (String id : selectedForDeletion) {
+                db.collection("parkings").document(id).delete();
+            }
+
+            Toast.makeText(this, "Estacionamientos eliminados", Toast.LENGTH_SHORT).show();
+            deleteMode = false;
+            buttonConfirmDelete.setVisibility(View.GONE);
+            adapter.setDeleteMode(false);
+            selectedForDeletion.clear();
+            loadParkings(); // Refresca lista
+        });
 
         buttonAddParking.setOnClickListener(v -> {
             Intent intent = new Intent(ManageParkingsActivity.this, RegisterParkingActivity.class);

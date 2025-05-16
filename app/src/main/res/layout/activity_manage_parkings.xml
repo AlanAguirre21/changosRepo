@@ -38,29 +38,22 @@
             android:layout_weight="1"
             android:text="Editar" />
 
-        <LinearLayout
-            android:layout_width="0dp"
+
+
+        <Button
+            android:id="@+id/buttonDeleteParking"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:text="Eliminar"
+            android:layout_marginStart="8dp" />
 
-            <Button
-                android:id="@+id/buttonAddParking"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Añadir Estacionamiento" />
-
-            <Button
-                android:id="@+id/buttonEditParking"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Editar Estacionamiento" />
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/buttonConfirmDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar definitivamente"
+            android:visibility="gone"
+            android:layout_marginStart="8dp" />
 
     </LinearLayout>
 
