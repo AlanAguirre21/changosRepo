@@ -1,4 +1,5 @@
 package com.example.parkgo;
+import android.content.Intent;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -58,7 +59,18 @@ public class AdminRegisterActivity extends AppCompatActivity {
                     db.collection("admins").document(uid).set(adminData)
                             .addOnSuccessListener(unused -> {
                                 Toast.makeText(this, "Administrador registrado. NIP: " + nip, Toast.LENGTH_LONG).show();
-                                finish();
+
+                                // Borra los campos
+                                emailEditText.setText("");
+                                passwordEditText.setText("");
+
+                                // Ir a AdminOptionsActivity
+                                Intent intent = new Intent(AdminRegisterActivity.this, AdminOptionsActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(intent);
+                                finish(); // Finaliza la actividad actual
+
+
                             })
                             .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar el NIP", Toast.LENGTH_SHORT).show());
 

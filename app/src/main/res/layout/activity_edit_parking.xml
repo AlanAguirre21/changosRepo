@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText android:id="@+id/editTextName" android:hint="Nombre" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/editTextAddress" android:hint="Dirección" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/editTextPhone" android:hint="Teléfono" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/editTextSchedule" android:hint="Horario" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/editTextSpaces" android:hint="Espacios Disponibles" android:inputType="number" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/editTextCost" android:hint="Costo por hora" android:inputType="numberDecimal" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/editTextRestrictions" android:hint="Restricciones" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <Button android:id="@+id/buttonSave" android:text="Guardar Cambios" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    </LinearLayout>
+</ScrollView>

@@ -57,6 +57,24 @@ public class ManageParkingsActivity extends AppCompatActivity {
             Intent intent = new Intent(ManageParkingsActivity.this, RegisterParkingActivity.class);
             startActivity(intent);
         });
+
+        Button buttonEditParking = findViewById(R.id.buttonEditParking);
+
+        buttonEditParking.setOnClickListener(v -> {
+            if (parkingList.isEmpty()) {
+                Toast.makeText(this, "No hay estacionamientos para editar", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Aquí puedes abrir un diálogo o lista para elegir cuál editar. Por simplicidad, seleccionamos el primero:
+            String parkingId = parkingList.get(0).getId(); // o implementar un diálogo para elegir
+
+            Intent intent = new Intent(ManageParkingsActivity.this, EditParkingActivity.class);
+            intent.putExtra("parkingId", parkingId);
+            startActivity(intent);
+        });
+
+
     }
 
     private void loadParkings() {
