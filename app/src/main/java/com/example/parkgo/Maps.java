@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -31,7 +32,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,7 +60,7 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
     private FirebaseFirestore db;
 
     private EditText searchEditText;
-    private Button searchButton;
+    private ImageButton searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,7 +218,8 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                             mMap.addMarker(new MarkerOptions()
                                     .position(location)
                                     .title(name)
-                                    .snippet(address));
+                                    .snippet(address)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.cono)));
                         }
                     }
                 })
@@ -228,11 +232,25 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
         db.collection("parkings").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     mMap.clear();
+
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         Double lat = doc.getDouble("latitude");
                         Double lng = doc.getDouble("longitude");
                         String name = doc.getString("name");
-                        String address = doc.getString("address");
+                        Object spacesObj = doc.get("spacesAvailable");
+
+                        Long availableSpots = null;
+                        if (spacesObj instanceof Long) {
+                            availableSpots = (Long) spacesObj;
+                        } else if (spacesObj instanceof Integer) {
+                            availableSpots = ((Integer) spacesObj).longValue();
+                        } else if (spacesObj != null) {
+                            try {
+                                availableSpots = Long.parseLong(spacesObj.toString());
+                            } catch (NumberFormatException e) {
+                                availableSpots = null;
+                            }
+                        }
 
                         if (lat != null && lng != null) {
                             LatLng parkingLatLng = new LatLng(lat, lng);
@@ -241,13 +259,21 @@ public class Maps extends AppCompatActivity implements OnMapReadyCallback {
                                     parkingLatLng.latitude, parkingLatLng.longitude, results);
 
                             if (results[0] / 1000 <= RADIUS_KM) {
-                                mMap.addMarker(new MarkerOptions()
+                                String title = (name != null) ? name : "Estacionamiento";
+                                if (availableSpots != null) {
+                                    title += " - " + availableSpots + " espacios disponibles";
+                                } else {
+                                    title += " - Espacios disponibles desconocidos";
+                                }
+
+                                Marker marker = mMap.addMarker(new MarkerOptions()
                                         .position(parkingLatLng)
-                                        .title(name)
-                                        .snippet(address));
+                                        .title(title)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.cono)));
                             }
                         }
                     }
                 });
     }
+
 }

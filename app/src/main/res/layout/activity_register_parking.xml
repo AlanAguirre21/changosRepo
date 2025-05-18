@@ -58,6 +58,8 @@
             android:id="@+id/buttonSaveParking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_oval_blue"
+            android:textColor="#FFFFFF"
             android:text="Guardar Estacionamiento" />
     </LinearLayout>
 </ScrollView>
